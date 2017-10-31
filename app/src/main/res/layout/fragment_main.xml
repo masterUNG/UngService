@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:layout_margin="30dp"
         android:background="@drawable/login_masterung"
         android:orientation="vertical">
@@ -35,6 +35,8 @@
                 android:src="@drawable/ic_action_name" />
 
             <EditText
+                android:inputType="textEmailAddress"
+                android:id="@+id/edtUser"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/user" />
@@ -53,11 +55,19 @@
                 android:src="@drawable/ic_action_password" />
 
             <EditText
+                android:inputType="textPassword"
+                android:id="@+id/edtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:text="@string/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

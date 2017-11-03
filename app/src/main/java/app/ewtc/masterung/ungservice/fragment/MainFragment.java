@@ -23,7 +23,7 @@ import app.ewtc.masterung.ungservice.R;
  * Created by masterung on 27/10/2017 AD.
  */
 
-public class MainFragment extends Fragment{
+public class MainFragment extends Fragment {
 
     private String userString, passwordString;
     private FirebaseAuth firebaseAuth;

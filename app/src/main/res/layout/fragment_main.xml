@@ -77,7 +77,7 @@
             android:layout_gravity="center_horizontal"
             android:textStyle="italic"
             android:textSize="@dimen/h2"
-            android:text="New Register"
+            android:text="@string/new_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

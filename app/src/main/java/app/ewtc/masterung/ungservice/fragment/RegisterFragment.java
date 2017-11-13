@@ -1,5 +1,6 @@
 package app.ewtc.masterung.ungservice.fragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,6 +30,7 @@ public class RegisterFragment extends Fragment {
 
     private String nameString, emailString, passwordString;
     private FirebaseAuth firebaseAuth;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -86,20 +88,29 @@ public class RegisterFragment extends Fragment {
 
     private void saveValueToFirebase() {
 
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Please Wait ...");
+        progressDialog.show();
+
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(emailString, passwordString)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
+                progressDialog.dismiss();
+
                 if (task.isSuccessful()) {
                     //Success
                     Toast.makeText(getActivity(), "Register Success",
                             Toast.LENGTH_SHORT).show();
+                    getActivity().getSupportFragmentManager().popBackStack();
                 } else {
                     //Have Error
                     MyAlert myAlert = new MyAlert(getActivity());
                     myAlert.myDialog("Cannot Register",
-                            "Please Try Again Register False");
+                            "Please Try Again Register False Because " +
+                                    task.getException().getMessage());
                 }
             }
         });

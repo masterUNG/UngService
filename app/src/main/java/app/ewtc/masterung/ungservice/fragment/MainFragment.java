@@ -1,7 +1,9 @@
 package app.ewtc.masterung.ungservice.fragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
@@ -11,7 +13,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import app.ewtc.masterung.ungservice.R;
 import app.ewtc.masterung.ungservice.utility.MyAlert;
@@ -23,6 +31,8 @@ import app.ewtc.masterung.ungservice.utility.MyAlert;
 public class MainFragment extends Fragment {
 
     private String emailString, passwordString;
+    private FirebaseAuth firebaseAuth;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -49,15 +59,52 @@ public class MainFragment extends Fragment {
                 passwordString = passwordEditText.getText().toString().trim();
 
                 if (emailString.isEmpty() || passwordString.isEmpty()) {
-                    //Have Space
+//                    Have Space
                     MyAlert myAlert = new MyAlert(getActivity());
                     myAlert.myDialog(getResources().getString(R.string.title_have_space),
                             getResources().getString(R.string.message_have_space));
                 } else {
+//                    No Space
+                    checkEmailAndPass();
                 }
 
             }
         });
+    }
+
+    private void checkEmailAndPass() {
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Please Wait Few Minus ...");
+        progressDialog.show();
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.signInWithEmailAndPassword(emailString, passwordString)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        progressDialog.dismiss();
+
+                        if (task.isSuccessful()) {
+//                            SignIn Success
+                            Toast.makeText(getActivity(), "Welcome To my Service",
+                                    Toast.LENGTH_SHORT).show();
+
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.contentFragmentMain, new ServiceFragment())
+                                    .addToBackStack(null).commit();
+
+                        } else {
+//                            Cannot SignIn
+                            MyAlert myAlert = new MyAlert(getActivity());
+                            myAlert.myDialog("Cannot Sign In",
+                                    "Because " + task.getException().getMessage());
+                        }
+
+                    }   // onConplete
+                });
+
     }
 
     private void registerController() {

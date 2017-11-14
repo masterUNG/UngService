@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import app.ewtc.masterung.ungservice.MainActivity;
 import app.ewtc.masterung.ungservice.R;
@@ -31,6 +32,7 @@ public class RegisterFragment extends Fragment {
     private String nameString, emailString, passwordString;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
+    private FirebaseUser firebaseUser;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -104,6 +106,10 @@ public class RegisterFragment extends Fragment {
                     //Success
                     Toast.makeText(getActivity(), "Register Success",
                             Toast.LENGTH_SHORT).show();
+
+//                    Storing Register User To Firebase
+                    storeRegister(task);
+
                     getActivity().getSupportFragmentManager().popBackStack();
                 } else {
                     //Have Error
@@ -114,6 +120,12 @@ public class RegisterFragment extends Fragment {
                 }
             }
         });
+
+    }
+
+    private void storeRegister(Task<AuthResult> task) {
+
+        firebaseUser = task.getResult().getUser();
 
     }
 
